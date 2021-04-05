@@ -47,7 +47,7 @@ class SaveReminderFragment : BaseFragment() {
 
         setDisplayHomeAsUpEnabled(true)
 
-        geofencingClient = LocationServices.getGeofencingClient(context!!)
+        geofencingClient = LocationServices.getGeofencingClient(requireActivity())
 
         binding.viewModel = _viewModel
 
@@ -109,7 +109,7 @@ class SaveReminderFragment : BaseFragment() {
             val geofence = Geofence.Builder()
                     .setRequestId(requestId)
                     .setCircularRegion(latitude, longitude,
-                            10.0F
+                            26.0F
                     )
                     .setExpirationDuration(GEOFENCE_EXPIRATION_IN_MILLISECONDS)
                     .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER)
@@ -120,22 +120,28 @@ class SaveReminderFragment : BaseFragment() {
                     .addGeofence(geofence)
                     .build()
 
-            val intent = Intent(context, GeofenceBroadcastReceiver::class.java)
+            val intent = Intent(requireContext(), GeofenceBroadcastReceiver::class.java)
             intent.action = ACTION_GEOFENCE_EVENT
 
-            val geofencePendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+            val geofencePendingIntent = PendingIntent.getBroadcast(requireActivity(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
 
+            geofencingClient.removeGeofences(geofencePendingIntent)?.run {
+                addOnCompleteListener {
+                    geofencingClient.addGeofences(geofencingRequest, geofencePendingIntent).run {
+                        addOnSuccessListener {
+                            Log.i(TAG, "added gf: $latitude, $longitude")
+                        }
 
-            geofencingClient.addGeofences(geofencingRequest, geofencePendingIntent).run {
-                addOnSuccessListener {
-                    Log.i(TAG, "added gf: $latitude, $longitude")
+                        addOnFailureListener {
+                            if (it.message != null) {
+                                Log.i(TAG, it.message.toString())
+                            }
+                        }
+
                 }
+            }
 
-                addOnFailureListener {
-                    if (it.message != null) {
-                        Log.i(TAG, it.message.toString())
-                    }
-                }
+
             }
         }
 
