@@ -72,7 +72,7 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
     ): View? {
         binding =
                 DataBindingUtil.inflate(inflater, R.layout.fragment_select_location, container, false)
-        Log.i(TAG, "about to bind viewmodel?")
+
         binding.viewModel = _viewModel
         binding.lifecycleOwner = this
 
@@ -102,7 +102,7 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
     }
 
     override fun onMapReady(p0: GoogleMap?) {
-        Log.i(TAG, "in onMapReady")
+
         if (p0 != null) {
             map = p0
         }
@@ -125,7 +125,7 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
                     _viewModel.latitude.value = latitude
                     _viewModel.longitude.value = longitude
                     _viewModel.reminderSelectedLocationStr.value = "lat: $latitude, long: $longitude"
-                    Log.i(TAG, "adding lat $latitude, long $longitude")
+
                     onLocationSelected()
                 })
         alertDialogBuilder.setNegativeButton(R.string.cancel,
@@ -149,7 +149,7 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
 
 
     private fun onLocationSelected() {
-        Log.i(TAG, "in onLocationSelected")
+
         _viewModel.navigationCommand.value = NavigationCommand.Back
 
 
@@ -184,8 +184,8 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
                 locationResult.addOnCompleteListener(requireActivity()) { task ->
                     if (task.isSuccessful){
                         lastKnownLocation = task.result
-                        Log.i(TAG, "got location: lat ${lastKnownLocation?.latitude}, " +
-                                "long ${lastKnownLocation?.longitude}")
+
+
                         if (lastKnownLocation != null) {
                             map?.moveCamera(CameraUpdateFactory.newLatLngZoom(
                                     LatLng(lastKnownLocation!!.latitude,

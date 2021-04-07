@@ -41,7 +41,7 @@ class SaveReminderFragment : BaseFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        Log.i("SaveReminderFragment", "in OnCreateView")
+
         binding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_save_reminder, container, false)
 
@@ -64,15 +64,13 @@ class SaveReminderFragment : BaseFragment() {
         }
 
         binding.saveReminder.setOnClickListener {
-            Log.i("SaveReminderFragment", "about to save")
+
             val title = _viewModel.reminderTitle.value
             val description = _viewModel.reminderDescription.value
             val location = _viewModel.reminderSelectedLocationStr.value
             val latitude = _viewModel.latitude.value
             val longitude = _viewModel.longitude.value
 
-            Log.i("SaveReminderFragment", "saving title $title, desc $description, " +
-                    "location $location, lat ${latitude.toString()}, long ${longitude.toString()}")
 
             var requestId: String = "error"
 
@@ -129,6 +127,7 @@ class SaveReminderFragment : BaseFragment() {
                 addOnCompleteListener {
                     geofencingClient.addGeofences(geofencingRequest, geofencePendingIntent).run {
                         addOnSuccessListener {
+                            Log.i(TAG, geofencingRequest.geofences[0].toString())
                             Log.i(TAG, "added gf: $latitude, $longitude")
                         }
 
