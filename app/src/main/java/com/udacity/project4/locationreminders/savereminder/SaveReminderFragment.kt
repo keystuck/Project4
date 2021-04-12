@@ -94,7 +94,7 @@ class SaveReminderFragment : BaseFragment() {
 
     @SuppressLint("MissingPermission")
     private fun addGeofence(requestId: String) {
-
+        Log.i(TAG, "requestId: " + requestId)
     val permFine = checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION)
         val permBack = checkSelfPermission(requireContext(), Manifest.permission.ACCESS_BACKGROUND_LOCATION)
 
@@ -107,8 +107,10 @@ class SaveReminderFragment : BaseFragment() {
             val geofence = Geofence.Builder()
                     .setRequestId(requestId)
                     .setCircularRegion(latitude, longitude,
-                            26.0F
+                            150F
                     )
+                    .setLoiteringDelay(10)
+                    .setNotificationResponsiveness(1000)
                     .setExpirationDuration(GEOFENCE_EXPIRATION_IN_MILLISECONDS)
                     .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER)
                     .build()
@@ -128,7 +130,9 @@ class SaveReminderFragment : BaseFragment() {
                     geofencingClient.addGeofences(geofencingRequest, geofencePendingIntent).run {
                         addOnSuccessListener {
                             Log.i(TAG, geofencingRequest.geofences[0].toString())
+                            Log.i(TAG, "requestId from gf: ${geofencingRequest.geofences[0].requestId}")
                             Log.i(TAG, "added gf: $latitude, $longitude")
+
                         }
 
                         addOnFailureListener {

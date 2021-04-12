@@ -2,6 +2,7 @@ package com.udacity.project4.locationreminders.savereminder.selectreminderlocati
 
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.annotation.TargetApi
 import android.app.Activity
 import android.app.AlertDialog
@@ -31,7 +32,9 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
 import com.google.android.libraries.places.api.Places
-import com.google.android.libraries.places.api.net.PlacesClient
+import com.google.android.libraries.places.api.model.Place
+import com.google.android.libraries.places.api.model.PlaceLikelihood
+import com.google.android.libraries.places.api.net.*
 import com.google.android.material.snackbar.Snackbar
 import com.udacity.project4.BuildConfig
 import com.udacity.project4.R
@@ -113,10 +116,12 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
         setMapClickListener(map)
     }
 
+    @SuppressLint("MissingPermission")
     private fun setMapClickListener(map:GoogleMap){
 
         var latitude = 0.0
         var longitude = 0.0
+        var placeName = ""
 
         var alertDialogBuilder = AlertDialog.Builder(requireContext())
         alertDialogBuilder.setMessage(R.string.confirm)
@@ -139,6 +144,27 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
             )
             latitude = latLng.latitude
             longitude = latLng.longitude
+
+            //TODO: Places API not allowed?
+//// Define a Place ID.
+//            val placeId = "INSERT_PLACE_ID_HERE"
+//
+//// Specify the fields to return.
+//            val placeFields = listOf(Place.Field.ID, Place.Field.NAME)
+//
+//// Construct a request object, passing the place ID and fields array.
+//            val request = FetchPlaceRequest.newInstance(placeId, placeFields)
+//
+//            placesClient.fetchPlace(request)
+//                    .addOnSuccessListener { response: FetchPlaceResponse ->
+//                        val place = response.place
+//                        Log.i(TAG, "Place found: ${place.name}")
+//                    }.addOnFailureListener { exception: Exception ->
+//                        if (exception is ApiException) {
+//                            Log.e(TAG, "Place not found: ${exception.message}")
+//
+//                        }
+//                    }
 
             val alert = alertDialogBuilder.create()
             alert.setTitle(R.string.select_location)

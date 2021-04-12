@@ -23,7 +23,7 @@ import org.koin.android.ext.android.inject
 
 class GeofenceBroadcastReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
-    Log.i("BroadcastReceiver", "got a broadcast")
+
         if (intent.action == ACTION_GEOFENCE_EVENT){
             GeofenceTransitionsJobIntentService.enqueueWork(context, intent)
         }
