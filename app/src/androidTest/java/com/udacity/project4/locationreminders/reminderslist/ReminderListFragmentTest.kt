@@ -12,8 +12,10 @@ import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.MediumTest
 import com.udacity.project4.R
+import com.udacity.project4.locationreminders.data.local.FakeTestRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.Assert.*
+import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mockito.mock
@@ -25,7 +27,19 @@ import org.mockito.Mockito.verify
 @MediumTest
 class ReminderListFragmentTest {
 
+    private lateinit var repository: FakeTestRepository
+
+    @Before
+    fun initRepository(){
+        repository = FakeTestRepository()
+    }
+
 //    TODO: test the navigation of the fragments.
 //    TODO: test the displayed data on the UI.
+    @Test
+    fun reminderList_DisplayedInUI(){
+
+    }
+
 //    TODO: add testing for the error messages.
 }

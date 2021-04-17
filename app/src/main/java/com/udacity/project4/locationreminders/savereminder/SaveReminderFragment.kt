@@ -95,11 +95,11 @@ class SaveReminderFragment : BaseFragment() {
     @SuppressLint("MissingPermission")
     private fun addGeofence(requestId: String) {
         Log.i(TAG, "requestId: " + requestId)
-    val permFine = checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION)
-        val permBack = checkSelfPermission(requireContext(), Manifest.permission.ACCESS_BACKGROUND_LOCATION)
+//    val permFine = checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION)
+//        val permBack = checkSelfPermission(requireContext(), Manifest.permission.ACCESS_BACKGROUND_LOCATION)
 
-        Log.i(TAG, "fine? ${permFine == PackageManager.PERMISSION_GRANTED}, " +
-                "background? ${permBack == PackageManager.PERMISSION_GRANTED}")
+//        Log.i(TAG, "fine? ${permFine == PackageManager.PERMISSION_GRANTED}, " +
+//                "background? ${permBack == PackageManager.PERMISSION_GRANTED}")
 
         val latitude = _viewModel.latitude.value
         val longitude = _viewModel.longitude.value

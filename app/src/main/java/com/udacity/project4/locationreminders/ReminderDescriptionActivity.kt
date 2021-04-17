@@ -41,28 +41,12 @@ class ReminderDescriptionActivity : AppCompatActivity() {
 
             binding.reminderDataItem = reminderDataItem
 
-//
-//            reminderString = reminderString.substring(
-//                    reminderString.indexOf(",")+2
-//            )
-//            binding.reminderDataItem!!.description = reminderString.substring(
-//                    reminderString.indexOf("=") + 1,
-//                    reminderString.indexOf(",")
-//            )
-//
-//            reminderString = reminderString.substring(
-//                    reminderString.indexOf(",")+2
-//            )
-//
-//            val location = reminderString.substring(
-//                    reminderString.indexOf("="),
-//                    reminderString.indexOf(",")
-//            )
+
 
 
 
       }
 
-//        TODO: Add the implementation of the reminder details
+
     }
 }
