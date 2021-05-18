@@ -20,8 +20,6 @@ class RemindersActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_reminders)
 
-
-
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

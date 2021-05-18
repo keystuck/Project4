@@ -37,6 +37,9 @@ import org.koin.dsl.module
 import org.koin.test.AutoCloseKoinTest
 import org.koin.test.get
 
+//TODO: login stuff!
+
+
 
 
 @RunWith(AndroidJUnit4::class)
@@ -91,6 +94,12 @@ class RemindersActivityTest :
         }
     }
 
+    @After
+    fun teardown(){
+        runBlocking {
+            repository.deleteAllReminders()
+        }
+    }
     /**
      * Idling resources tell Espresso that the app is idle or busy. This is needed when operations
      * are not scheduled in the main Looper (for example when executed on a different thread).

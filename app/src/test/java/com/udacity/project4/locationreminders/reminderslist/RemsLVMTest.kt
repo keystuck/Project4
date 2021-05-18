@@ -20,7 +20,7 @@ import java.util.regex.Matcher
 
 @RunWith(AndroidJUnit4::class)
 @ExperimentalCoroutinesApi
-class RemindersLVMTest {
+class RemsLVMTest {
 
     private lateinit var remindersListViewModel: RemindersListViewModel
     private lateinit var fakeDataSource: FakeDataSource

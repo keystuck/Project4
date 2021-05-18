@@ -37,11 +37,9 @@ class ReminderDescriptionActivity : AppCompatActivity() {
             val serializable = intent.getSerializableExtra(EXTRA_ReminderDataItem)
 
             val reminderDataItem = serializable as ReminderDataItem
-            Log.i("RemDescAct", "title ${reminderDataItem.title}")
+
 
             binding.reminderDataItem = reminderDataItem
-
-
 
 
 

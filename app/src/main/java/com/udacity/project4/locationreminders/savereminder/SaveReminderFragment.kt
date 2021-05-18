@@ -75,7 +75,6 @@ class SaveReminderFragment : BaseFragment() {
             if (_viewModel.longitude.value == null){
                 _viewModel.longitude.value = 2.0
             }
-            Log.i("SaveReminderFragment", "values: ${_viewModel.latitude.value.toString()}")
 
             val title = _viewModel.reminderTitle.value
             val description = _viewModel.reminderDescription.value
@@ -98,20 +97,12 @@ class SaveReminderFragment : BaseFragment() {
                 Log.i(TAG, "values before call ${_viewModel.reminderTitle.value}")
                 addGeofence(requestId)
             }
-//             use the user entered reminder details to:
-//             1) add a geofencing request
-//             2) save the reminder to the local db
+
         }
     }
 
     @SuppressLint("MissingPermission")
     private fun addGeofence(requestId: String) {
-        Log.i(TAG, "requestId: " + requestId)
-//    val permFine = checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION)
-//        val permBack = checkSelfPermission(requireContext(), Manifest.permission.ACCESS_BACKGROUND_LOCATION)
-
-//        Log.i(TAG, "fine? ${permFine == PackageManager.PERMISSION_GRANTED}, " +
-//                "background? ${permBack == PackageManager.PERMISSION_GRANTED}")
 
         val latitude = _viewModel.latitude.value
         val longitude = _viewModel.longitude.value

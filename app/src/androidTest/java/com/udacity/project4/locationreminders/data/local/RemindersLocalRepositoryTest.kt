@@ -33,10 +33,7 @@ class RemindersLocalRepositoryTest {
 
     private val reminder1 = ReminderDTO("Title1", "desc1",
     "location1", 1.234, 2.345)
-    private val reminder2 = ReminderDTO("Title2", "desc1",
-            "location1", 1.234, 2.345)
-    private val reminder3 = ReminderDTO("Title3", "desc1",
-            "location1", 1.234, 2.345)
+
 
 
 

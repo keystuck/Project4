@@ -32,21 +32,16 @@ class SRVMTest {
 
     private val reminder1DTO = ReminderDTO("Title1", "desc1",
             "location1", 1.234, 2.345)
-    private val reminder1DataItem = ReminderDataItem("Title1", "desc1",
-            "location1", 1.234, 2.345, reminder1DTO.id)
 
     private val reminder2DTO = ReminderDTO("Title2", "desc1",
             "location1", 1.234, 2.345)
-    private val reminder2DataItem = ReminderDataItem("Title2", "desc1",
-            "location1", 1.234, 2.345, reminder2DTO.id)
 
-    private val reminder3DTO = ReminderDTO("Title3", "desc1",
-            "location1", 1.234, 2.345)
     private val reminder3DataItem = ReminderDataItem("Title3", "desc1",
             "location1", 1.234, 2.345, reminder2DTO.id)
 
     private lateinit var saveReminderViewModel: SaveReminderViewModel
 
+    //TODO: replace with FakeDataSource?
     private val remindersList = listOf(reminder1DTO, reminder2DTO).sortedBy { it.id }
 
 
@@ -88,15 +83,4 @@ class SRVMTest {
         val value = saveReminderViewModel.showSnackBarInt.value
         assertThat(value, `is`(R.string.err_enter_title))
     }
-
-    @Test
-    fun validateAndSave_rejectsEmptyLocation(){
-        val badReminder2DataItem = ReminderDataItem("title", "description", "", 1.234, 2.345)
-
-        saveReminderViewModel.validateAndSaveReminder(badReminder2DataItem)
-        val value = saveReminderViewModel.showSnackBarInt.value
-        assertThat(value, `is`(R.string.err_select_location))
-    }
-
-
 }

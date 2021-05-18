@@ -63,6 +63,8 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        //TODO????
         Places.initialize(context!!, "AIzaSyDq6AdndukFVrcThT1HCvVZfLuT6LNGJP4")
         placesClient = Places.createClient(context!!)
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context!!)
@@ -91,14 +93,10 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
     checkDeviceLocationSettings(true)
         // fusion? get location (in onMapReady())
 
-//        zoom to the user location after taking his permission
-
-//        add style to the map
-
-//        put a marker to location that the user selected
+//        TODO zoom to the user location after taking his permission
 
 
-//        call this function after the user confirms on the selected location
+
 
 
         return binding.root
@@ -146,7 +144,7 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
             longitude = latLng.longitude
 
             //TODO: Places API not allowed?
-//// Define a Place ID.
+//// TODO: Define a Place ID.
 //            val placeId = "INSERT_PLACE_ID_HERE"
 //
 //// Specify the fields to return.
@@ -374,6 +372,8 @@ private const val LOCATION_PERMISSION_INDEX = 0
 private const val BACKGROUND_LOCATION_PERMISSION_INDEX = 1
 
     private const val DEFAULT_ZOOM = 15
+
+//TODO: these are unused?
     private const val PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1
 
     // Keys for storing activity state.
