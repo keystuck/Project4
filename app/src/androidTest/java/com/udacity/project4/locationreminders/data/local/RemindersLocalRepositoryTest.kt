@@ -40,7 +40,6 @@ class RemindersLocalRepositoryTest {
 
 
 
-//    private lateinit var reminderDataSource: FakeDataSource
     private lateinit var remindersRepository: RemindersLocalRepository
 
 

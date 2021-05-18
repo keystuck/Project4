@@ -27,6 +27,7 @@ import com.udacity.project4.utils.setDisplayHomeAsUpEnabled
 import org.koin.android.ext.android.inject
 import java.util.concurrent.TimeUnit
 
+//TODO point of interest
 
 class SaveReminderFragment : BaseFragment() {
     //Get the view model this time as a single to be shared with the another fragment
@@ -64,6 +65,17 @@ class SaveReminderFragment : BaseFragment() {
         }
 
         binding.saveReminder.setOnClickListener {
+
+            if (_viewModel.reminderSelectedLocationStr.value.isNullOrEmpty()){
+                _viewModel.reminderSelectedLocationStr.value = "default location"
+            }
+            if (_viewModel.latitude.value == null){
+                _viewModel.latitude.value = 1.0
+            }
+            if (_viewModel.longitude.value == null){
+                _viewModel.longitude.value = 2.0
+            }
+            Log.i("SaveReminderFragment", "values: ${_viewModel.latitude.value.toString()}")
 
             val title = _viewModel.reminderTitle.value
             val description = _viewModel.reminderDescription.value
