@@ -41,11 +41,24 @@
             android:id="@+id/tv_description"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-
             android:textSize="@dimen/text_size_large"
             tools:text="Description"
             android:text="@{reminderDataItem.description}"
             />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/location"
+            />
+
+        <TextView
+            android:id="@+id/tv_location"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/text_size_large"
+            tools:text="Location"
+            android:text="@{reminderDataItem.location}" />
 
         <TextView
             android:layout_width="match_parent"

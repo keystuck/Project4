@@ -21,7 +21,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.koin.core.context.stopKoin
 
-//TODO Live data objects are tested using shouldReturnError and check_loading testing functions.
+
 
 @ExperimentalCoroutinesApi
 @RunWith(AndroidJUnit4::class)
@@ -41,7 +41,7 @@ class SRVMTest {
 
     private lateinit var saveReminderViewModel: SaveReminderViewModel
 
-    //TODO: replace with FakeDataSource?
+
     private val remindersList = listOf(reminder1DTO, reminder2DTO).sortedBy { it.id }
 
 

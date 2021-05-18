@@ -51,11 +51,10 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
     override val _viewModel: SaveReminderViewModel by inject()
     private lateinit var binding: FragmentSelectLocationBinding
     private lateinit var map: GoogleMap
-    private lateinit var placesClient: PlacesClient
+
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
     private var lastKnownLocation: Location? = null
 
-    private var cameraPosition: CameraPosition? = null
     private val defaultLocation = LatLng(-33.8523341, 151.2106085)
 
     private val runningQOrLater = android.os.Build.VERSION.SDK_INT >=
@@ -64,9 +63,6 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        //TODO????
-        Places.initialize(context!!, "AIzaSyDq6AdndukFVrcThT1HCvVZfLuT6LNGJP4")
-        placesClient = Places.createClient(context!!)
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context!!)
 
 
@@ -91,13 +87,6 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
         requestForegroundAndBackgroundLocationPermissions()
 
     checkDeviceLocationSettings(true)
-        // fusion? get location (in onMapReady())
-
-//        TODO zoom to the user location after taking his permission
-
-
-
-
 
         return binding.root
     }
@@ -111,7 +100,43 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
         setMapStyle(map)
         updateLocationUI()
         getDeviceLocation()
+        setPoiClick(map)
         setMapClickListener(map)
+    }
+
+    private fun setPoiClick(map: GoogleMap) {
+        var latitude = 0.0
+        var longitude = 0.0
+        var placeName = ""
+
+        var alertDialogBuilder = AlertDialog.Builder(requireContext())
+        alertDialogBuilder.setMessage(R.string.confirm)
+        alertDialogBuilder.setPositiveButton(R.string.ok,
+                DialogInterface.OnClickListener{ dialog, id ->
+                    _viewModel.latitude.value = latitude
+                    _viewModel.longitude.value = longitude
+                    _viewModel.reminderSelectedLocationStr.value = placeName
+
+                    onLocationSelected()
+                })
+        alertDialogBuilder.setNegativeButton(R.string.cancel,
+                DialogInterface.OnClickListener(){ dialog, id ->
+                    map.clear()
+                })
+            map.setOnPoiClickListener { pointOfInterest ->
+                map.addMarker(
+                        MarkerOptions()
+                                .position(pointOfInterest.latLng)
+                )
+                latitude = pointOfInterest.latLng.latitude
+                longitude = pointOfInterest.latLng.longitude
+                placeName = pointOfInterest.name
+
+
+                val alert = alertDialogBuilder.create()
+                alert.setTitle(R.string.select_location)
+                alert.show()
+            }
     }
 
     @SuppressLint("MissingPermission")
@@ -119,7 +144,6 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
 
         var latitude = 0.0
         var longitude = 0.0
-        var placeName = ""
 
         var alertDialogBuilder = AlertDialog.Builder(requireContext())
         alertDialogBuilder.setMessage(R.string.confirm)
@@ -142,27 +166,6 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
             )
             latitude = latLng.latitude
             longitude = latLng.longitude
-
-            //TODO: Places API not allowed?
-//// TODO: Define a Place ID.
-//            val placeId = "INSERT_PLACE_ID_HERE"
-//
-//// Specify the fields to return.
-//            val placeFields = listOf(Place.Field.ID, Place.Field.NAME)
-//
-//// Construct a request object, passing the place ID and fields array.
-//            val request = FetchPlaceRequest.newInstance(placeId, placeFields)
-//
-//            placesClient.fetchPlace(request)
-//                    .addOnSuccessListener { response: FetchPlaceResponse ->
-//                        val place = response.place
-//                        Log.i(TAG, "Place found: ${place.name}")
-//                    }.addOnFailureListener { exception: Exception ->
-//                        if (exception is ApiException) {
-//                            Log.e(TAG, "Place not found: ${exception.message}")
-//
-//                        }
-//                    }
 
             val alert = alertDialogBuilder.create()
             alert.setTitle(R.string.select_location)
@@ -206,16 +209,17 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
             if (foregroundAndBackgroundLocationPermissionApproved()){
                 val locationResult = fusedLocationProviderClient.lastLocation
                 locationResult.addOnCompleteListener(requireActivity()) { task ->
-                    if (task.isSuccessful){
+                    if (task.isSuccessful) {
+
                         lastKnownLocation = task.result
 
-
                         if (lastKnownLocation != null) {
+
                             map?.moveCamera(CameraUpdateFactory.newLatLngZoom(
                                     LatLng(lastKnownLocation!!.latitude,
                                             lastKnownLocation!!.longitude), DEFAULT_ZOOM.toFloat()
                             ))
-                        }
+
                         } else {
                             Log.d(TAG, "Current location is null. Using defaults")
                             Log.e(TAG, "Exception: ${task.exception}")
@@ -223,6 +227,7 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
                                     .newLatLngZoom(defaultLocation, DEFAULT_ZOOM.toFloat()))
                             map?.uiSettings?.isMyLocationButtonEnabled = false
                         }
+                    }
                     }
                 }
             } catch (e: SecurityException){
@@ -373,12 +378,4 @@ private const val BACKGROUND_LOCATION_PERMISSION_INDEX = 1
 
     private const val DEFAULT_ZOOM = 15
 
-//TODO: these are unused?
-    private const val PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1
 
-    // Keys for storing activity state.
-    private const val KEY_CAMERA_POSITION = "camera_position"
-    private const val KEY_LOCATION = "location"
-
-    // Used for selecting the current place.
-    private const val M_MAX_ENTRIES = 5

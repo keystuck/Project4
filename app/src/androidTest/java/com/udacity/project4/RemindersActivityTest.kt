@@ -37,10 +37,6 @@ import org.koin.dsl.module
 import org.koin.test.AutoCloseKoinTest
 import org.koin.test.get
 
-//TODO: login stuff!
-
-
-
 
 @RunWith(AndroidJUnit4::class)
 @LargeTest
@@ -52,6 +48,7 @@ class RemindersActivityTest :
     private lateinit var appContext: Application
     // An idling resource that waits for Data Binding to have no pending bindings.
     private val dataBindingIdlingResource = DataBindingIdlingResource()
+    private lateinit var firebaseAuth: FirebaseAuth
 
     /**
      * As we use Koin as a Service Locator Library to develop our code, we'll also use Koin to test our code.
@@ -62,7 +59,7 @@ class RemindersActivityTest :
         stopKoin()//stop the original app koin
         appContext = getApplicationContext()
 
-//        authorization = FirebaseAuth.getInstance()
+        firebaseAuth = FirebaseAuth.getInstance()
 
 
         val myModule = module {
@@ -106,7 +103,7 @@ class RemindersActivityTest :
      */
     @Before
     fun registerIdlingResource() {
-
+        firebaseAuth.signInWithEmailAndPassword("stuckeyemily@hotmail.com", "password")
         IdlingRegistry.getInstance().register(EspressoIdlingResource.countingIdlingResource)
         IdlingRegistry.getInstance().register(dataBindingIdlingResource)
     }

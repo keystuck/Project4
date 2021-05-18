@@ -76,7 +76,8 @@ class RemsLVMTest {
         )
     }
 
-    fun loadReminders_showLoading() = runBlockingTest {
+    @Test
+    fun loadrems_showload() = runBlockingTest {
         remindersListViewModel.loadReminders()
         assertThat(
                 remindersListViewModel.showLoading.getOrAwaitValue(),
