@@ -52,6 +52,8 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
     private lateinit var binding: FragmentSelectLocationBinding
     private lateinit var map: GoogleMap
 
+    private var permSnackbar: Snackbar? = null
+
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
     private var lastKnownLocation: Location? = null
 
@@ -242,10 +244,10 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
                         grantResults[BACKGROUND_LOCATION_PERMISSION_INDEX] ==
                         PackageManager.PERMISSION_DENIED))
         {
-            Snackbar.make(
+            permSnackbar = Snackbar.make(
                     binding.root,
                     R.string.permission_denied_explanation,
-                    Snackbar.LENGTH_INDEFINITE
+                    Snackbar.LENGTH_LONG
             )
                     .setAction(R.string.settings){
                         startActivity(Intent().apply {
@@ -253,7 +255,8 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
                             data = Uri.fromParts("package", BuildConfig.APPLICATION_ID, null)
                             flags = Intent.FLAG_ACTIVITY_NEW_TASK
                         })
-                    }.show()
+                    }
+            permSnackbar!!.show()
         } else {
             checkDeviceLocationSettings()
         }
@@ -368,6 +371,12 @@ private fun foregroundAndBackgroundLocationPermissionApproved(): Boolean{
         }
     }
 
+    override fun onDestroy() {
+        if (permSnackbar != null) {
+            permSnackbar!!.dismiss()
+        }
+        super.onDestroy()
+    }
 }
 private const val REQUEST_FOREGROUND_AND_BACKGROUND_PERMISSION_RESULT_CODE = 33
 private const val REQUEST_FOREGROUND_ONLY_PERMISSIONS_REQUEST_CODE = 34

@@ -1,7 +1,9 @@
 package com.udacity.project4.locationreminders.reminderslist
 
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.udacity.project4.locationreminders.MainCoroutineRule
 import com.udacity.project4.locationreminders.data.FakeDataSource
 import com.udacity.project4.locationreminders.data.dto.ReminderDTO
 import com.udacity.project4.locationreminders.getOrAwaitValue
@@ -11,6 +13,7 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
 import org.junit.After
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -21,6 +24,14 @@ import java.util.regex.Matcher
 @RunWith(AndroidJUnit4::class)
 @ExperimentalCoroutinesApi
 class RemsLVMTest {
+
+    @get:Rule
+    var instantExecutorRule = InstantTaskExecutorRule()
+
+   @ExperimentalCoroutinesApi
+   @get:Rule
+   var mainCoroutineRule = MainCoroutineRule()
+
 
     private lateinit var remindersListViewModel: RemindersListViewModel
     private lateinit var fakeDataSource: FakeDataSource
@@ -45,8 +56,6 @@ class RemsLVMTest {
         fakeDataSource = FakeDataSource(remindersList.toMutableList())
         remindersListViewModel = RemindersListViewModel(ApplicationProvider.getApplicationContext(),
               fakeDataSource)
-
-
     }
 
     @After
@@ -78,10 +87,17 @@ class RemsLVMTest {
 
     @Test
     fun loadrems_showload() = runBlockingTest {
+        mainCoroutineRule.pauseDispatcher()
         remindersListViewModel.loadReminders()
         assertThat(
                 remindersListViewModel.showLoading.getOrAwaitValue(),
                 `is`(true)
+        )
+
+        mainCoroutineRule.resumeDispatcher()
+        assertThat(
+            remindersListViewModel.showLoading.getOrAwaitValue(),
+            `is`(false)
         )
     }
 
