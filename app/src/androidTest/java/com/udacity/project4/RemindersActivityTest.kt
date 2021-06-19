@@ -1,13 +1,17 @@
 package com.udacity.project4
 
+
+
+import android.app.Activity
 import android.app.Application
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.IdlingRegistry
-import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.action.ViewActions.replaceText
+import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.matcher.RootMatchers.isDialog
 import androidx.test.espresso.matcher.RootMatchers.withDecorView
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -23,11 +27,13 @@ import com.udacity.project4.locationreminders.savereminder.SaveReminderViewModel
 import com.udacity.project4.util.DataBindingIdlingResource
 import com.udacity.project4.util.monitorActivity
 import com.udacity.project4.utils.EspressoIdlingResource
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.CoreMatchers.not
 import org.junit.After
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -43,6 +49,10 @@ import org.koin.test.get
 //END TO END test to black box test the app
 class RemindersActivityTest :
     AutoCloseKoinTest() {// Extended Koin Test - embed autoclose @after method to close Koin after every test
+
+    @get:Rule
+    val instantTaskExecutorRule = InstantTaskExecutorRule()
+
 
     private lateinit var repository: ReminderDataSource
     private lateinit var appContext: Application
@@ -131,8 +141,27 @@ class RemindersActivityTest :
         onView(withId(R.id.reminderTitle)).check(matches(isDisplayed()))
 
         onView(withId(R.id.reminderTitle)).perform(replaceText("New Reminder"))
-        onView(withId(R.id.reminderDescription)).perform(replaceText("New desc"))
+        onView(withId(R.id.reminderDescription)).perform(replaceText("New desc"), closeSoftKeyboard())
+
+        onView(withId(R.id.selectLocation)).perform(click())
+
+        onView(withId(R.id.map)).check(matches(isDisplayed()))
+        onView(withId(R.id.map)).perform(click())
+        delay(1000)
+        onView(withText(R.string.confirm))
+            .inRoot(isDialog())
+            .check(matches(isDisplayed()))
+
+        onView(withText("OK"))
+            .inRoot(isDialog())
+            .perform(click())
+
+
         onView(withId(R.id.saveReminder)).perform(click())
+
+        //TO REVIEWER: the below test for toast works on 29 and below but hangs on 30
+//        onView(withText(R.string.reminder_saved)).inRoot(withDecorView(not(`is`(getActivity(activityScenario)!!.window.decorView)))).check(matches(isDisplayed()))
+
 
         onView(withText("New Reminder")).check(matches(isDisplayed()))
 
@@ -167,5 +196,12 @@ class RemindersActivityTest :
     }
 
 
-
+    // get activity context
+    private fun getActivity(activityScenario: ActivityScenario<RemindersActivity>): Activity? {
+        var activity: Activity? = null
+        activityScenario.onActivity {
+            activity = it
+        }
+        return activity
+    }
 }

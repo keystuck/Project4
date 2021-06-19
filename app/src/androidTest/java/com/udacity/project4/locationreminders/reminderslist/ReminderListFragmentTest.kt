@@ -131,6 +131,4 @@ class ReminderListFragmentTest {
     }
 
 
-
-//
 }

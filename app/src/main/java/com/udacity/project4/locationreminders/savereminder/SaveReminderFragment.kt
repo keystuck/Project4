@@ -65,15 +65,15 @@ class SaveReminderFragment : BaseFragment() {
 
         binding.saveReminder.setOnClickListener {
 
-            if (_viewModel.reminderSelectedLocationStr.value.isNullOrEmpty()){
-                _viewModel.reminderSelectedLocationStr.value = "default location"
-            }
-            if (_viewModel.latitude.value == null){
-                _viewModel.latitude.value = 1.0
-            }
-            if (_viewModel.longitude.value == null){
-                _viewModel.longitude.value = 2.0
-            }
+//            if (_viewModel.reminderSelectedLocationStr.value.isNullOrEmpty()){
+//                _viewModel.reminderSelectedLocationStr.value = "default location"
+//            }
+//            if (_viewModel.latitude.value == null){
+//                _viewModel.latitude.value = 1.0
+//            }
+//            if (_viewModel.longitude.value == null){
+//                _viewModel.longitude.value = 2.0
+//            }
 
             val title = _viewModel.reminderTitle.value
             val description = _viewModel.reminderDescription.value
@@ -84,16 +84,14 @@ class SaveReminderFragment : BaseFragment() {
 
             var requestId: String = "error"
 
-            if (!(title.isNullOrEmpty()) && !(location.isNullOrEmpty())) {
 
                 requestId = _viewModel.validateAndSaveReminder(
                         ReminderDataItem(title, description, location,
                         latitude, longitude
                 ))
 
-            }
+
             if (!requestId.equals("error")){
-                Log.i(TAG, "values before call ${_viewModel.reminderTitle.value}")
                 addGeofence(requestId)
             }
 
