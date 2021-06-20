@@ -140,8 +140,17 @@ class RemindersActivityTest :
         onView(withId(R.id.addReminderFAB)).perform(click())
         onView(withId(R.id.reminderTitle)).check(matches(isDisplayed()))
 
+        onView(withId(R.id.saveReminder)).perform(click())
+        onView(withText(R.string.err_enter_title)).check(matches(isDisplayed()))
+
         onView(withId(R.id.reminderTitle)).perform(replaceText("New Reminder"))
+
+        delay(3000)
+
         onView(withId(R.id.reminderDescription)).perform(replaceText("New desc"), closeSoftKeyboard())
+
+        onView(withId(R.id.saveReminder)).perform(click())
+        onView(withText(R.string.err_select_location)).check(matches(isDisplayed()))
 
         onView(withId(R.id.selectLocation)).perform(click())
 
